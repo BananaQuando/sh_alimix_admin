@@ -5,8 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider }  from 'mobx-react';
 
+import { stores } from './stores';
+
 ReactDOM.render(
-	<Provider>
+	<Provider {...stores}>
 		<React.StrictMode>
 			<App />
 		</React.StrictMode>
