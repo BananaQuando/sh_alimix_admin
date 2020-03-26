@@ -1,4 +1,4 @@
-import './libs/css/adminlte.min.css';
+import './libs/css/adminlte.css';
 import './libs/css/alt/adminlte.components.min.css';
 import './libs/css/alt/adminlte.core.min.css';
 import './libs/css/alt/adminlte.pages.min.css';

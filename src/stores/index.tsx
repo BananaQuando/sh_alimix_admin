@@ -1,4 +1,4 @@
-
+import { SidebarMenuStore } from './SidebarMenuStore';
 
 
 interface Stores {
@@ -6,5 +6,5 @@ interface Stores {
 }
 
 export const stores: Stores = {
-	
+	sidebarMenuStore: new SidebarMenuStore()
 }
