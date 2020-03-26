@@ -3,7 +3,8 @@ import './Styles';
 
 function App() {
   return (
-		<div className="wrapper"><nav className="main-header navbar navbar-expand navbar-white navbar-light">
+		<div className="wrapper">
+			<nav className="main-header navbar navbar-expand navbar-white navbar-light">
 				<ul className="navbar-nav">
 					<li className="nav-item d-none d-sm-inline-block"><a className="nav-link" href="index3.html">Home</a></li>
 					<li className="nav-item d-none d-sm-inline-block"><a className="nav-link" href="#1">Contact</a></li>
