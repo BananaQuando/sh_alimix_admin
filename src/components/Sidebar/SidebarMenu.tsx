@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import { ISidebarMenuStore, IMenuList } from '../../stores/SidebarMenuStore/interfaces';
 import { observable, action } from 'mobx';
 import { Link } from 'react-router-dom';
-
+// import 'Config'
 
 interface Props {
 	sidebarMenuStore?: ISidebarMenuStore,

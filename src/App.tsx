@@ -9,6 +9,7 @@ import Categories from './pages/Categories';
 import Category from './pages/Category';
 import Product from './pages/Product';
 import Footer from './components/Footer';
+import './Config';
 
 
 export default class App extends React.Component{
