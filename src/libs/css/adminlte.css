@@ -12658,6 +12658,12 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 	color: #fff;
 }
 
+
+.rdw-editor-main{
+	background: #fff;
+	padding: 0 15px;
+}
+
 [class*=sidebar-dark-] .nav-sidebar .nav-item .nav-link i{
 	display: inline-block;
 	margin: 0 10px 0 0;

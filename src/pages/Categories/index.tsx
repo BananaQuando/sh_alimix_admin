@@ -32,7 +32,7 @@ export default class Categories extends React.Component <Props> {
 			},
 			{
 				title: 'Категории',
-				link: '/users',
+				link: '/categories',
 				isCurrent: true
 			}
 		]);
