@@ -3,10 +3,7 @@ import { observer, inject } from 'mobx-react';
 import { ICategoryStore, ICategoryItem } from '../../stores/CategoryStore/interfaces';
 import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces';
 import { observable } from 'mobx';
-import { EditorState, ContentState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
+import CustomEditor from '../../components/CustomEditor';
 
 interface Props {
 	match: {
@@ -58,10 +55,16 @@ export default class Categories extends React.Component <Props> {
 		]);
 	}
 
+	onEditorStateChange(){
+		
+	}
+
 	render (){
-		console.log(this.category)
+
+		const { categoryID } = this.props.match.params;
+
 		return (
-			<Editor />
+			<CustomEditor content='<p>test</p>' editorID={`category_${categoryID}_editor`} />
 		);
 	}
 
