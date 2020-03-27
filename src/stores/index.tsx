@@ -1,4 +1,6 @@
 import { SidebarMenuStore } from './SidebarMenuStore';
+import { CategoryStore } from './CategoryStore';
+import { ContentHeaderStore } from './ContentHeaderStore';
 
 
 interface Stores {
@@ -6,5 +8,7 @@ interface Stores {
 }
 
 export const stores: Stores = {
-	sidebarMenuStore: new SidebarMenuStore()
+	sidebarMenuStore: new SidebarMenuStore(),
+	categoryStore: new CategoryStore(),
+	contentHeaderStore: new ContentHeaderStore()
 }

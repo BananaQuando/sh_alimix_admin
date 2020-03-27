@@ -12654,6 +12654,15 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
   content: '\00a0';
 }
 
+.user-panel .info{
+	color: #fff;
+}
+
+[class*=sidebar-dark-] .nav-sidebar .nav-item .nav-link i{
+	display: inline-block;
+	margin: 0 10px 0 0;
+}
+
 @media (min-width: 992px) {
   .sidebar-mini .nav-sidebar,
   .sidebar-mini .nav-sidebar > .nav-header,

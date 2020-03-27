@@ -1,27 +1,41 @@
 import React from 'react';
+import { inject, observer } from "mobx-react";
+import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces'
+import { Link } from 'react-router-dom';
+
+interface Props{
+	contentHeaderStore? : IContentHeaderStore
+}
 
 
 
-export default class ContentHeader extends React.Component {
+@inject('contentHeaderStore')
+@observer
+export default class Sidebar extends React.Component <Props> {
 
-	render (){
+	render(){
+		const { headingTitle, breadcrumbs } = this.props.contentHeaderStore!;
 		return (
-			<div className="content-header">
+			<section className="content-header">
 				<div className="container-fluid">
 					<div className="row mb-2">
 						<div className="col-sm-6">
-							<h1 className="m-0 text-dark">Dashboard</h1>
+							<h1>{headingTitle}</h1>
 						</div>
 						<div className="col-sm-6">
 							<ol className="breadcrumb float-sm-right">
-								<li className="breadcrumb-item"><a href="#1">Home</a></li>
-								<li className="breadcrumb-item active">Dashboard v1</li>
+								{breadcrumbs.map((el, index) => {
+									if (el.isCurrent){
+										return <li key={index} className="breadcrumb-item">{el.title}</li>
+									}else{
+										return <li key={index} className="breadcrumb-item"><Link to={el.link}>{el.title}</Link></li>
+									}
+								})}
 							</ol>
 						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 		);
 	}
-
 }

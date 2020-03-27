@@ -30,14 +30,14 @@ export default class SidebarMenu extends React.Component <Props> {
 
 				if(menuElement.chidrens){
 					return <li className="nav-item has-treeview menu-open">
-								<Link to={menuElement.link}>{ menuElement.icon ? <i className={menuElement.icon}></i> : '' }{menuElement.title}</Link>
+								<Link className='nav-link' to={menuElement.link}>{ menuElement.icon ? <i className={menuElement.icon}></i> : '' }{menuElement.title}</Link>
 								<ul className="nav nav-treeview">
 									{ this.generateMenu(menuElement.chidrens) }
 								</ul>
 							</li>
 				}else{
 					return <li className="nav-item">
-								<Link to={menuElement.link}>{ menuElement.icon ? <i className={menuElement.icon}></i> : '' }{menuElement.title}</Link>
+								<Link className='nav-link' to={menuElement.link}>{ menuElement.icon ? <i className={menuElement.icon}></i> : '' }{menuElement.title}</Link>
 							</li>
 				}
 			}
