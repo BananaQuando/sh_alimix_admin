@@ -5,6 +5,8 @@ import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces'
 import { observable } from 'mobx';
 import CustomEditor from '../../components/CustomEditor';
 import Card from '../../components/Card';
+import CustomTextInput from '../../components/CustomTextInput';
+import CustomImageUpload from '../../components/CustomImageUpload';
 
 interface Props {
 	match: {
@@ -56,17 +58,16 @@ export default class Categories extends React.Component <Props> {
 		]);
 	}
 
-	onEditorStateChange(){
-		
-	}
-
 	render (){
 
-		const { categoryID } = this.props.match.params;
+		const { id, title, description, thumb } = this.category;
 
 		return (
-			<Card cardTools={true} title='Edit category'>
-				<CustomEditor title='Описание' content='<p>test</p>' inputID={`category_${categoryID}_editor`} />
+			<Card title='Edit category'>
+				{ title ? <CustomTextInput title='Title' content={ title } inputID={`category_${id}_title`} /> : '' }
+				{ description ? <CustomEditor title='Description' content={ description } inputID={`category_${id}_description`} /> : '' }
+				{ thumb ? <CustomImageUpload title='Thumbnail' content={ thumb } inputID={`category_${id}_thumb`} /> : '' }
+				{ thumb ? <CustomImageUpload title='Thumbnail' content={ thumb } inputID={`category_${id}_thumb_2`} /> : '' }
 			</Card>
 		);
 	}

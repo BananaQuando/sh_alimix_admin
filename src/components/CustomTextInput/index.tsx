@@ -1,14 +1,10 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
 import { IInputDataStore, IInputDataItem } from '../../stores/InputDataStore/interfaces';
 
 interface Props {
-	inputID: string | number,
+	inputID: string,
 	content?: string,
 	title?: string,
 	inputDataStore?: IInputDataStore,
@@ -19,14 +15,8 @@ interface Props {
 @observer
 export default class CustomTextInput extends React.Component <Props> {
 
-	@observable editorState = EditorState.createEmpty();
+	@observable inputValue = '';
 	@observable inputDataItem = {} as IInputDataItem
-
-	@action onEditorStateChange = (_editorState: any) => {
-
-		this.editorState = _editorState;
-		this.inputDataItem.inputContent = this.convertToHtml(_editorState);
-	};
 
 	@action componentDidMount(){
 
@@ -34,31 +24,25 @@ export default class CustomTextInput extends React.Component <Props> {
 
 		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, this.props.content);
 		
-		this.editorState = this.convertToState(this.inputDataItem.inputContent);
+		this.inputValue = this.inputDataItem.inputContent;
 	}
 
-	@action convertToHtml(state: any){
+	@action onContentChangeHandler (_event: any) {
 
-		const rawContentState = convertToRaw(state.getCurrentContent());
- 
-		return draftToHtml(rawContentState);
-	}
+		this.inputValue = _event.target.value;
+		this.inputDataItem.inputContent = _event.target.value;
+	};
 
-	@action convertToState(content: any){
-
-		const contentBlock = htmlToDraft(content);
-		const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-
-		return EditorState.createWithContent(contentState);
-	}
 
 	render (){
 
+		const { inputID, title } = this.props;
+
 		return (
-			<>
-				{ this.props.title ? <b>{this.props.title}</b> : ''}
-				<Editor editorState={this.editorState} onEditorStateChange={this.onEditorStateChange} />
-			</>
+			<div className="form-group">
+				{ title ? <label htmlFor={inputID}>{ title }</label> : ''}
+				<input type='test' className='form-control' id={inputID} value={this.inputValue} onChange={this.onContentChangeHandler} />
+			</div>
 		);
 	}
 

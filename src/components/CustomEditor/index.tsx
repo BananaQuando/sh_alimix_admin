@@ -8,7 +8,7 @@ import htmlToDraft from 'html-to-draftjs';
 import { IInputDataStore, IInputDataItem } from '../../stores/InputDataStore/interfaces';
 
 interface Props {
-	inputID: string | number,
+	inputID: string,
 	content?: string,
 	title?: string,
 	inputDataStore?: IInputDataStore,
@@ -37,16 +37,16 @@ export default class CustomEditor extends React.Component <Props> {
 		this.editorState = this.convertToState(this.inputDataItem.inputContent);
 	}
 
-	@action convertToHtml(state: any){
+	@action convertToHtml(_state: any){
 
-		const rawContentState = convertToRaw(state.getCurrentContent());
+		const rawContentState = convertToRaw(_state.getCurrentContent());
  
 		return draftToHtml(rawContentState);
 	}
 
-	@action convertToState(content: any){
+	@action convertToState(_content: any){
 
-		const contentBlock = htmlToDraft(content);
+		const contentBlock = htmlToDraft(_content);
 		const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
 
 		return EditorState.createWithContent(contentState);
@@ -54,11 +54,13 @@ export default class CustomEditor extends React.Component <Props> {
 
 	render (){
 
+		const { inputID, title } = this.props;
+
 		return (
-			<>
-				{ this.props.title ? <b>{this.props.title}</b> : ''}
+			<div className="form-group">
+				{ title ? <label htmlFor={inputID}>{ title }</label> : ''}
 				<Editor editorState={this.editorState} onEditorStateChange={this.onEditorStateChange} />
-			</>
+			</div>
 		);
 	}
 

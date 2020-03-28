@@ -12665,6 +12665,36 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 	border: 1px solid #F1F1F1;
 }
 
+.hidden{
+	display: none !important;
+}
+
+.form-upload__image{
+	cursor: pointer;
+	width: 200px;
+	height: 200px;
+	display: inline-block;
+	border-radius: 5px;
+	overflow: hidden;
+	border: 1px solid #ebebeb;
+	margin: 0 25px 0 0;
+}
+
+.form-upload{
+	display: flex;
+	align-items: center;
+}
+
+.form-upload__image img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.label-block{
+	display: block;
+}
+
 [class*=sidebar-dark-] .nav-sidebar .nav-item .nav-link i{
 	display: inline-block;
 	margin: 0 10px 0 0;
