@@ -1,7 +1,9 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
-import { IInputDataStore, IInputDataItem } from '../../stores/InputDataStore/interfaces';
+import { IInputDataStore, IInputDataItem } from '../../../stores/InputDataStore/interfaces';
+import placeholder from './placeholder.png';
+
 
 interface Props {
 	inputID: string,
@@ -15,14 +17,14 @@ interface Props {
 @observer
 export default class CustomImageUpload extends React.Component <Props> {
 
-	@observable imageValue = '';
+	@observable imageValue = placeholder;
 	@observable inputDataItem = {} as IInputDataItem
 
 	@action componentDidMount(){
 
-		const { inputID } = this.props;
+		const { inputID, content } = this.props;
 
-		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, this.props.content);
+		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content ? content : placeholder);
 		
 		this.imageValue = this.inputDataItem.inputContent;
 	}

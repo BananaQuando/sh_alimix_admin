@@ -3,10 +3,10 @@ import { observer, inject } from 'mobx-react';
 import { ICategoryStore, ICategoryItem } from '../../stores/CategoryStore/interfaces';
 import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces';
 import { observable } from 'mobx';
-import CustomEditor from '../../components/CustomEditor';
+import CustomEditor from '../../components/Forms/CustomEditor';
 import Card from '../../components/Card';
-import CustomTextInput from '../../components/CustomTextInput';
-import CustomImageUpload from '../../components/CustomImageUpload';
+import CustomTextInput from '../../components/Forms/CustomTextInput';
+import CustomImageUpload from '../../components/Forms/CustomImageUpload';
 
 interface Props {
 	match: {
@@ -67,7 +67,6 @@ export default class Categories extends React.Component <Props> {
 				{ title ? <CustomTextInput title='Title' content={ title } inputID={`category_${id}_title`} /> : '' }
 				{ description ? <CustomEditor title='Description' content={ description } inputID={`category_${id}_description`} /> : '' }
 				{ thumb ? <CustomImageUpload title='Thumbnail' content={ thumb } inputID={`category_${id}_thumb`} /> : '' }
-				{ thumb ? <CustomImageUpload title='Thumbnail' content={ thumb } inputID={`category_${id}_thumb_2`} /> : '' }
 			</Card>
 		);
 	}

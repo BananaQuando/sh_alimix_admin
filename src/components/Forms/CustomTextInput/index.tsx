@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
-import { IInputDataStore, IInputDataItem } from '../../stores/InputDataStore/interfaces';
+import { IInputDataStore, IInputDataItem } from '../../../stores/InputDataStore/interfaces';
 
 interface Props {
 	inputID: string,
