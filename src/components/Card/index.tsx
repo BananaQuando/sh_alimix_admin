@@ -1,7 +1,9 @@
 import React from 'react';
+import TabButton from './TabButton';
 
 
-interface CardProps{
+interface Props{
+	id?: string,
 	title?: string,
 	cardClass?: string,
 	cardBodyClass?: string,
@@ -9,26 +11,27 @@ interface CardProps{
 	cardTools?: boolean,
 	cardTabs?: {
 		title: string,
-		link: string
+		link: string,
+		tabsID: string
 	}[]
 }
 
-export default class Card extends React.Component<CardProps> {
+export default class Card extends React.Component<Props> {
 
 	render() {
 
-		const { title, children, cardBodyClass, cardHeaderClass, cardClass, cardTabs, cardTools } = this.props;
+		const { title, children, cardBodyClass, cardHeaderClass, cardClass, cardTabs, cardTools, id } = this.props;
 
 		return (
-			<div className={`card ${cardClass}`}>
-				{ title || cardTabs || cardTools ? <div className={`card-header ${cardHeaderClass}`}>
+			<div id={ id ? id : ''} className={`card ${ cardClass ? cardClass : ''}`}>
+				{ title || cardTabs || cardTools ? <div className={`card-header ${ cardHeaderClass ? cardHeaderClass : ''}`}>
 					{ title ? <h3 className="card-title">{ title }</h3> : ''}
 					{
 						cardTabs ?
 						<ul className="nav nav-pills">
 							{ cardTabs.map((tab, index) => (
 								<li key={index} className="nav-item">
-									<a className={`nav-link ${ index === 0 ? 'active' : ''}`} href={ tab.link } data-toggle="tab">{ tab.title }</a>
+									<TabButton active={ index === 0 ? true : false} tabsID={tab.tabsID} link={tab.link} title={tab.title}  />
 								</li>
 							)) }
 						</ul>
@@ -45,7 +48,7 @@ export default class Card extends React.Component<CardProps> {
 						: ''
 					}
 				</div> : '' }
-				<div className={`card-body ${cardBodyClass}`}>
+				<div className={`card-body ${ cardBodyClass ? cardBodyClass : ''}`}>
 					{ children }
 				</div>
 			</div>
