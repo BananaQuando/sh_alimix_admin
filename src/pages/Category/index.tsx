@@ -4,6 +4,7 @@ import { ICategoryStore, ICategoryItem } from '../../stores/CategoryStore/interf
 import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces';
 import { observable } from 'mobx';
 import CustomEditor from '../../components/CustomEditor';
+import Card from '../../components/Card';
 
 interface Props {
 	match: {
@@ -64,7 +65,9 @@ export default class Categories extends React.Component <Props> {
 		const { categoryID } = this.props.match.params;
 
 		return (
-			<CustomEditor content='<p>test</p>' editorID={`category_${categoryID}_editor`} />
+			<Card cardTools={true} title='Edit category'>
+				<CustomEditor title='Описание' content='<p>test</p>' inputID={`category_${categoryID}_editor`} />
+			</Card>
 		);
 	}
 

@@ -12662,6 +12662,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 .rdw-editor-main{
 	background: #fff;
 	padding: 0 15px;
+	border: 1px solid #F1F1F1;
 }
 
 [class*=sidebar-dark-] .nav-sidebar .nav-item .nav-link i{

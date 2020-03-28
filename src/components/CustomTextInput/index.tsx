@@ -17,7 +17,7 @@ interface Props {
 
 @inject('inputDataStore')
 @observer
-export default class CustomEditor extends React.Component <Props> {
+export default class CustomTextInput extends React.Component <Props> {
 
 	@observable editorState = EditorState.createEmpty();
 	@observable inputDataItem = {} as IInputDataItem
