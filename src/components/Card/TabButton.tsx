@@ -13,6 +13,8 @@ export default class TabButton extends React.Component<Props> {
 
 	@action onClickHandler = (_event: any) =>{
 
+		_event.preventDefault();
+
 		const { tabs_id, link } = _event.target.dataset;
 
 		document.querySelectorAll(`#${tabs_id} .tab-pane`).forEach(tab => {

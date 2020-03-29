@@ -10,12 +10,12 @@ export interface IProductItem {
 	name: string,
 	description: string | null,
 	currency: number | null,
-	language_id: number,
-	main_category: number,
+	languageID: number,
+	mainCategory: number,
 	rating: number,
-	orders_count: number,
+	ordersCount: number,
 	reviews: number,
-	thumbnail: number,
+	thumbnail: string,
 	images: string[],
 	options: {
 		[key: string]: number[]
@@ -64,7 +64,7 @@ export interface IProductResponce {
 	orders_count: number,
 	default_url: string,
 	reviews: number,
-	thumbnail: number,
+	thumbnail: string,
 	images: string[],
 	options: {
 		[key: string]: number[]

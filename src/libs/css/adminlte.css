@@ -12695,6 +12695,19 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 	display: block;
 }
 
+.table .product-thumb{
+	width: 60px;
+}
+
+.table .product-price .product-price__old{
+	text-decoration: line-through;
+}
+
+.table .product-price .product-price__current{
+	font-weight: bold;
+	font-size: 16px;
+}
+
 [class*=sidebar-dark-] .nav-sidebar .nav-item .nav-link i{
 	display: inline-block;
 	margin: 0 10px 0 0;
