@@ -87,17 +87,21 @@ export interface ITimeDependsDataResponce {
 }
 
 export interface ITimeDependsDataDatesResponce {
-	[key: number]: {
-		regular: {
-			[key: number]: number
-		},
-		special: {
-			[key: number]: number
-		},
-		quantity: {
-			[key: number]: number
-		},
-		totalOrders: number
+	id: number,
+	product_id: number,
+	dates: {
+		[key: number]: {
+			regular: {
+				[key: number]: number
+			},
+			special: {
+				[key: number]: number
+			},
+			quantity: {
+				[key: number]: number
+			},
+			totalOrders: number
+		}
 	}
 }
 

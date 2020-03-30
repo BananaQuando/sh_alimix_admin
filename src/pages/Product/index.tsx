@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
+import { Doughnut } from 'react-chartjs-2';
 import { IProductStore, IProductItem } from '../../stores/ProductStore/interfaces';
 import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces';
 import { observable, action } from 'mobx';
@@ -121,6 +122,14 @@ export default class Product extends React.Component <Props> {
 
 		const { id, name, description, thumbnail } = this.product;
 
+		const data = (canvas) => {
+			const ctx = canvas.getContext("2d")
+			const gradient = ctx.createLinearGradient(0,0,100,0);
+			return {
+			  backgroundColor: gradient
+			}
+		}
+
 		return (
 			<div className="row">
 				<div className="col-md-10">
@@ -141,6 +150,11 @@ export default class Product extends React.Component <Props> {
 							: ''
 						}
 						<button type="button" className="btn btn-block btn-danger">Delete</button>
+					</Card>
+				</div>
+				<div className="col-md-12">
+					<Card title='Prices'>
+						<Doughnut data={data} />
 					</Card>
 				</div>
 			</div>

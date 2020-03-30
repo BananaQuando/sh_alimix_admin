@@ -63,8 +63,6 @@ export class ProductStore implements IProductStore {
 			return await this.fetchProducts(this.categoryProductsList[_categoryID]);
 		}else{
 
-			;
-
 			// const responce = await fetch(`${Config.host}/category_products/${_categoryID}`);
 			// const data = await responce.json();
 
@@ -83,8 +81,21 @@ export class ProductStore implements IProductStore {
 		
 	}
 
-	@action async getProductPriceData(_productID: number) {
-		
+	@action async getProductPriceData(_productID: number): Promise<ITimeDependsDataDates> {
+		if (!this.productList[_productID]) this.productList[_productID] = await this.getProduct(_productID);
+
+		if (Object.keys(this.productList[_productID].dates).length){
+
+			return this.productList[_productID].dates;
+		}else{
+
+			const responce = await fetch(`${Config.host}/time_depends_data?product_id=${_productID}`);
+			const data:ITimeDependsDataDatesResponce = await responce.json();
+
+			this.productList[_productID].dates = data.dates;
+
+			return this.productList[_productID].dates;
+		}
 	}
 
 	@action async saveProduct(_product: IProductItem){
