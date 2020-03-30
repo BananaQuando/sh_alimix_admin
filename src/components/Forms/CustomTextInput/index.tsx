@@ -8,7 +8,9 @@ interface Props {
 	content?: string,
 	title?: string,
 	inputDataStore?: IInputDataStore,
-	inputDataItem?: IInputDataItem
+	inputDataItem?: IInputDataItem,
+	onChange?: Function,
+	reset?: boolean
 }
 
 @inject('inputDataStore')
@@ -16,22 +18,40 @@ interface Props {
 export default class CustomTextInput extends React.Component <Props> {
 
 	@observable inputValue = '';
-	@observable inputDataItem = {} as IInputDataItem
+	@observable inputDataItem = {} as IInputDataItem;
+	@observable onChange = this.props.onChange? this.props.onChange : () => {};
 
 	@action componentDidMount(){
 
-		const { inputID } = this.props;
 
-		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, this.props.content);
+		const { inputID, content } = this.props;
+
+		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content);
 		
 		this.inputValue = this.inputDataItem.inputContent;
 	}
 
-	@action onContentChangeHandler (_event: any) {
+	@action onContentChangeHandler = (_event: any) => {
 
 		this.inputValue = _event.target.value;
 		this.inputDataItem.inputContent = _event.target.value;
+		this.onChange();
 	};
+
+	@action resetValues = () => {
+
+		const { inputID, content } = this.props;
+
+		this.inputDataItem = this.props.inputDataStore!.updateInputData(inputID, content);
+		this.inputValue = this.inputDataItem.inputContent;
+	}
+
+	componentWillReceiveProps(_nextProps: any){
+
+		if (_nextProps.reset) {
+			this.resetValues();
+		}
+	}
 
 
 	render (){

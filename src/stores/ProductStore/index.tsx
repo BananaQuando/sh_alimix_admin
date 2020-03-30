@@ -52,26 +52,30 @@ export class ProductStore implements IProductStore {
 		}
 	}
 
+	async fetchProducts(list: number[]) {
+		return Promise.all(list.map(async (id) => await this.getProduct(id)))
+	}
+
 	@action async getProductsByCategory(_categoryID: number) {
 		
 		if (this.categoryProductsList[_categoryID]){
-			return this.categoryProductsList[_categoryID];
+			
+			return await this.fetchProducts(this.categoryProductsList[_categoryID]);
 		}else{
 
-			this.categoryProductsList[_categoryID] = [];
+			;
 
-			const responce = await fetch(`${Config.host}/products?main_category${_categoryID}`);
-			const data = await responce.json();
+			// const responce = await fetch(`${Config.host}/category_products/${_categoryID}`);
+			// const data = await responce.json();
 
-			await data.forEach(async (_productResponce: IProductResponce) => {
-				
-				const product = await this.formatProductData(_productResponce);
+			const data = {
+				id: 1,
+				products: [1,2,3,4]
+			}
 
-				this.productList[product.id] = product;
-				this.categoryProductsList[_categoryID].push(product);
-			});
+			this.categoryProductsList[_categoryID] = data.products;
 
-			return this.categoryProductsList[_categoryID];
+			return await this.fetchProducts(data.products);
 		}
 	}
 
@@ -81,5 +85,10 @@ export class ProductStore implements IProductStore {
 
 	@action async getProductPriceData(_productID: number) {
 		
+	}
+
+	@action async saveProduct(product: IProductItem){
+		
+		console.log('saving product')
 	}
 }

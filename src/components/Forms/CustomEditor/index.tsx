@@ -12,7 +12,9 @@ interface Props {
 	content?: string,
 	title?: string,
 	inputDataStore?: IInputDataStore,
-	inputDataItem?: IInputDataItem
+	inputDataItem?: IInputDataItem,
+	onChange?: Function,
+	reset?: boolean
 }
 
 @inject('inputDataStore')
@@ -20,21 +22,39 @@ interface Props {
 export default class CustomEditor extends React.Component <Props> {
 
 	@observable editorState = EditorState.createEmpty();
-	@observable inputDataItem = {} as IInputDataItem
+	@observable inputDataItem = {} as IInputDataItem;
+	@observable onChange = this.props.onChange? this.props.onChange : () => {};
+	@observable reset = this.props.reset;
 
 	@action onEditorStateChange = (_editorState: any) => {
 
 		this.editorState = _editorState;
 		this.inputDataItem.inputContent = this.convertToHtml(_editorState);
+		this.onChange();
 	};
 
 	@action componentDidMount(){
 
-		const { inputID } = this.props;
+		const { inputID, content } = this.props;
 
-		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, this.props.content);
+		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content);
 		
 		this.editorState = this.convertToState(this.inputDataItem.inputContent);
+	}
+
+	@action resetValues = () => {
+
+		const { inputID, content } = this.props;
+
+		this.inputDataItem = this.props.inputDataStore!.updateInputData(inputID, content);
+		this.editorState = this.convertToState(this.inputDataItem.inputContent);
+	}
+
+	componentWillReceiveProps(_nextProps: any){
+		
+		if (_nextProps.reset){
+			this.resetValues();
+		}
 	}
 
 	@action convertToHtml(_state: any){

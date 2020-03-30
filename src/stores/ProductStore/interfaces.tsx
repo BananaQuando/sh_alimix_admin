@@ -2,7 +2,8 @@ export interface IProductStore {
 	getProduct: Function,
 	getProductsByCategory: Function,
 	getProductOptionValue: Function,
-	getProductPriceData: Function
+	getProductPriceData: Function,
+	saveProduct: Function
 }
 
 export interface IProductItem {
@@ -50,7 +51,7 @@ export interface IProductList{
 }
 
 export interface ICategoryProductsList{
-	[key: number]: IProductItem[]
+	[key: number]: number[]
 }
 
 export interface IProductResponce {

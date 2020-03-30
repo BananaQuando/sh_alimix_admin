@@ -12708,6 +12708,10 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 	font-size: 16px;
 }
 
+.mb-10{
+	margin-bottom: 100px !important;
+}
+
 [class*=sidebar-dark-] .nav-sidebar .nav-item .nav-link i{
 	display: inline-block;
 	margin: 0 10px 0 0;

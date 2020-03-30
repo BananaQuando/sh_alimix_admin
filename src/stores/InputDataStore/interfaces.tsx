@@ -1,6 +1,7 @@
 export interface IInputDataStore {
 	getInputDataStore: Function,
-	createInputDataStore: Function
+	createInputDataStore: Function,
+	updateInputData: Function,
 }
 
 export interface IInputDataItem {

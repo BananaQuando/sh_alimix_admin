@@ -28,7 +28,7 @@ export default class App extends React.Component{
 									<Route path='/' exact component={Home} />
 									<Route path='/categories' exact component={Categories} />
 									<Route path='/categories/:categoryID' component={Category} />
-									<Route path='/product/:productID' component={Product} />
+									<Route path='/products/:productID' component={Product} />
 								</Switch>
 							</div>
 						</section>

@@ -23,6 +23,20 @@ export class InputDataStore implements IInputDataStore {
 		}
 	}
 
+	@action updateInputData(inputID: number, inputContent: string = '') {
+
+		if(this.inputsList[inputID]){
+			
+			this.inputsList[inputID].inputContent = inputContent;
+
+			return this.inputsList[inputID];
+		}else{
+
+			this.inputsList[inputID] = this.createInputDataStore(inputID, inputContent);
+			return this.inputsList[inputID];
+		}
+	}
+
 	@action createInputDataStore(inputID: number, inputContent: string):IInputDataItem {
 		
 		return {
