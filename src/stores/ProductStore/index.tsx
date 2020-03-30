@@ -87,8 +87,13 @@ export class ProductStore implements IProductStore {
 		
 	}
 
-	@action async saveProduct(product: IProductItem){
+	@action async saveProduct(_product: IProductItem){
 		
 		console.log('saving product')
+	}
+
+	@action async deleteProduct(_productID: number){
+
+		console.log('deleting product')
 	}
 }

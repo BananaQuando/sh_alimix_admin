@@ -3,7 +3,8 @@ export interface IProductStore {
 	getProductsByCategory: Function,
 	getProductOptionValue: Function,
 	getProductPriceData: Function,
-	saveProduct: Function
+	saveProduct: Function,
+	deleteProduct: Function
 }
 
 export interface IProductItem {

@@ -10,7 +10,9 @@ interface Props {
 	content?: string,
 	title?: string,
 	inputDataStore?: IInputDataStore,
-	inputDataItem?: IInputDataItem
+	inputDataItem?: IInputDataItem,
+	onChange?: Function,
+	reset?: boolean
 }
 
 @inject('inputDataStore')
@@ -18,7 +20,9 @@ interface Props {
 export default class CustomImageUpload extends React.Component <Props> {
 
 	@observable imageValue = placeholder;
-	@observable inputDataItem = {} as IInputDataItem
+	@observable inputDataItem = {} as IInputDataItem;
+	@observable onChange = this.props.onChange? this.props.onChange : () => {};
+	@observable reset = this.props.reset;
 
 	@action componentDidMount(){
 
@@ -38,8 +42,24 @@ export default class CustomImageUpload extends React.Component <Props> {
 
 			this.imageValue = imageURL;
 			this.inputDataItem.inputContent = imageURL;
+			this.onChange();
 		}
-	};
+	}
+
+	@action resetValues = () => {
+
+		const { inputID, content } = this.props;
+
+		this.inputDataItem = this.props.inputDataStore!.updateInputData(inputID, content);
+		this.imageValue = this.inputDataItem.inputContent;
+	}
+
+	componentWillReceiveProps(_nextProps: any){
+		
+		if (_nextProps.reset){
+			this.resetValues();
+		}
+	}
 
 
 	render (){

@@ -8,6 +8,7 @@ import Card from '../../components/Card';
 import CustomTextInput from '../../components/Forms/CustomTextInput';
 import CustomEditor from '../../components/Forms/CustomEditor';
 import { IInputDataStore } from '../../stores/InputDataStore/interfaces';
+import CustomImageUpload from '../../components/Forms/CustomImageUpload';
 
 interface Props {
 	match: {
@@ -45,6 +46,10 @@ export default class Product extends React.Component <Props> {
 		this.category = await this.props.categoryStore.getCategory(this.product.mainCategory);
 
 		this.setSeoData();
+
+		if (this.product.name !== await this.getInputValue('name') || this.product.description !== await this.getInputValue('description')){
+			this.reset = true;
+		}
 	}
 
 
@@ -99,14 +104,22 @@ export default class Product extends React.Component <Props> {
 
 		this.product.name = await this.getInputValue('name');
 		this.product.description = await this.getInputValue('description');
+		this.product.thumbnail = await this.getInputValue('thumbnail');
 
 		this.props.productStore.saveProduct(this.product);
 		this.reset = false;
 	}
 
+	@action deleteProduct = async () => {
+
+		const { id } = this.product;
+
+		this.props.productStore.deleteProduct(id);
+	}
+
 	render (){
 
-		const { id, name, description } = this.product;
+		const { id, name, description, thumbnail } = this.product;
 
 		return (
 			<div className="row">
@@ -114,6 +127,7 @@ export default class Product extends React.Component <Props> {
 					<Card title='Edit'>
 						{ name ? <CustomTextInput onChange={this.setReset} reset={this.resetForm} title='Name' inputID={`product_${id}_name`} content={name} /> : '' }
 						{ description ? <CustomEditor onChange={this.setReset} reset={this.resetForm} title='Description' inputID={`product_${id}_description`} content={description} /> : '' }
+						{ description ? <CustomImageUpload onChange={this.setReset} reset={this.resetForm} title='Thumbnail' inputID={`product_${id}_thumbnail`} content={thumbnail} /> : '' }
 					</Card>
 				</div>
 				<div className="col-md-2">
