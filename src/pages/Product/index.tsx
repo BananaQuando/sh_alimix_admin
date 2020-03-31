@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut, Line } from 'react-chartjs-2';
 import { IProductStore, IProductItem } from '../../stores/ProductStore/interfaces';
 import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces';
 import { observable, action } from 'mobx';
@@ -10,6 +10,7 @@ import CustomTextInput from '../../components/Forms/CustomTextInput';
 import CustomEditor from '../../components/Forms/CustomEditor';
 import { IInputDataStore } from '../../stores/InputDataStore/interfaces';
 import CustomImageUpload from '../../components/Forms/CustomImageUpload';
+import PriceChart from '../../components/PriceChart';
 
 interface Props {
 	match: {
@@ -43,6 +44,10 @@ export default class Product extends React.Component <Props> {
 		const { productID } = this.props.match.params;
 
 		this.product = await this.props.productStore.getProduct(productID);
+
+		if (!Object.keys(this.product.dates).length){
+			this.product.dates = await this.props.productStore.getProductPriceData(this.product.id);
+		}
 
 		this.category = await this.props.categoryStore.getCategory(this.product.mainCategory);
 
@@ -120,16 +125,7 @@ export default class Product extends React.Component <Props> {
 
 	render (){
 
-		const { id, name, description, thumbnail } = this.product;
-
-		const data = (canvas) => {
-			const ctx = canvas.getContext("2d")
-			const gradient = ctx.createLinearGradient(0,0,100,0);
-			return {
-			  backgroundColor: gradient
-			}
-		}
-
+		const { id, name, description, thumbnail, dates } = this.product;
 		return (
 			<div className="row">
 				<div className="col-md-10">
@@ -154,7 +150,7 @@ export default class Product extends React.Component <Props> {
 				</div>
 				<div className="col-md-12">
 					<Card title='Prices'>
-						<Doughnut data={data} />
+						{ dates && Object.keys(dates).length ? <PriceChart datesData={dates} /> : '' }
 					</Card>
 				</div>
 			</div>

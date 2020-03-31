@@ -90,7 +90,7 @@ export class ProductStore implements IProductStore {
 		}else{
 
 			const responce = await fetch(`${Config.host}/time_depends_data?product_id=${_productID}`);
-			const data:ITimeDependsDataDatesResponce = await responce.json();
+			const data:ITimeDependsDataDatesResponce = (await responce.json())[0];
 
 			this.productList[_productID].dates = data.dates;
 

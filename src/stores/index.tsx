@@ -3,6 +3,7 @@ import { CategoryStore } from './CategoryStore';
 import { ContentHeaderStore } from './ContentHeaderStore';
 import { InputDataStore } from './InputDataStore'
 import { ProductStore } from './ProductStore';
+import { OptionsStore } from './OptionsStore';
 
 interface Stores {
 	[key: string]: any;
@@ -13,5 +14,6 @@ export const stores: Stores = {
 	categoryStore: new CategoryStore(),
 	contentHeaderStore: new ContentHeaderStore(),
 	inputDataStore: new InputDataStore(),
-	productStore: new ProductStore()
+	productStore: new ProductStore(),
+	optionStore: new OptionsStore()
 }
