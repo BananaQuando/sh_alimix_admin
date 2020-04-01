@@ -23,7 +23,6 @@ export default class CustomTextInput extends React.Component <Props> {
 
 	@action componentDidMount(){
 
-
 		const { inputID, content } = this.props;
 
 		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content);
@@ -35,7 +34,7 @@ export default class CustomTextInput extends React.Component <Props> {
 
 		this.inputValue = _event.target.value;
 		this.inputDataItem.inputContent = _event.target.value;
-		this.onChange();
+		this.onChange(_event);
 	};
 
 	@action resetValues = () => {

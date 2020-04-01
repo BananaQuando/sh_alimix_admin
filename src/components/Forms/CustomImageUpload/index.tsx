@@ -42,7 +42,7 @@ export default class CustomImageUpload extends React.Component <Props> {
 
 			this.imageValue = imageURL;
 			this.inputDataItem.inputContent = imageURL;
-			this.onChange();
+			this.onChange(_event);
 		}
 	}
 

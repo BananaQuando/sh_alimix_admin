@@ -10,19 +10,39 @@ interface Props {
 	optionStore?: IOptionStore
 }
 
+interface State {
+	data: {
+		labels: string[],
+		datasets: any[]
+	}
+}
+
 
 @observer
 @inject('optionStore')
-export default class PriceChart extends React.Component <Props> {
+export default class PriceChart extends React.Component <Props, State> {
 
-	@observable data = {
-		labels: [] as string[],
-		datasets: [] as any[],
-	};
+	constructor(props: any){
+		super(props);
+
+		this.state = {
+			data: {
+				labels: [],
+				datasets: []
+			}
+		};
+	}
+
+	@observable data = '';
 
 	@observable complete = false;
 
-	@observable @action formatDatesData = async (dates: ITimeDependsDataDates) => {
+	@observable formatDatesData = async (dates: ITimeDependsDataDates) => {
+
+		let data = {
+			labels: [] as string[],
+			datasets: [] as any[],
+		};
 
 		for (const date in dates) {
 
@@ -30,48 +50,46 @@ export default class PriceChart extends React.Component <Props> {
 
 				const dateData = dates[date];
 
-				if (this.data.labels.indexOf(date) === -1) this.data.labels.push(date);
+				if (data.labels.indexOf(date) === -1) data.labels.push(date);
 				for (const key in dateData.regular) {
 
 					if (dateData.regular.hasOwnProperty(key)) {
 						const price = dateData.regular[key];
 						
 						const keyName = `regular_${key}`;
-						const optionIndex = this.findOptionInArray(keyName, this.data.datasets);
+						const optionIndex = this.findOptionInArray(keyName, data.datasets);
 						
-						if (optionIndex) {
-							this.data.datasets[optionIndex].data.push(price);
+						if (optionIndex !== null) {
+							data.datasets[optionIndex].data.push(price);
 						}else{
-							const lineRegular = this.createLineData(keyName, 'rgba(0,0,255,1)');
+							const lineRegular = this.createLineData(keyName, 'rgba(0, 123, 255, 1)');
 							lineRegular.data.push(price);
-							this.data.datasets.push(lineRegular);
+							data.datasets.push(lineRegular);
 						}
 					}
+				}
 
+				for (const key in dateData.special) {
 					if (dateData.special.hasOwnProperty(key)) {
 						const price = dateData.special[key];
 						
 						const keyName = `special_${key}`;
-						const optionIndex = this.findOptionInArray(keyName, this.data.datasets);
-						
-						if (optionIndex) {
-							this.data.datasets[optionIndex].data.push(price);
+						const optionIndex = this.findOptionInArray(keyName, data.datasets);
+						if (optionIndex !== null) {
+							data.datasets[optionIndex].data.push(price);
 						}else{
-							const lineSpecial = this.createLineData(keyName, 'rgba(255,0,0,1)');
+							const lineSpecial = this.createLineData(keyName, 'rgba(227, 95, 108, 1)');
 							lineSpecial.data.push(price);
-							this.data.datasets.push(lineSpecial);
+							data.datasets.push(lineSpecial);
 						}
 					}
-
 				}
-	
 			}
 		}
-		
-		this.data = await this.formatLabels(this.data);
 
-		this.complete = true;
-		return this.data;
+		data = await this.formatLabels(data);
+
+		return data;
 	}
 
 	@observable @action async formatLabels(_data: any){
@@ -84,11 +102,15 @@ export default class PriceChart extends React.Component <Props> {
 		
 		for (let index = 0; index < _data.datasets.length; index++) {
 
-			const label = _data.datasets[index].label.replace(/((regular_)+)?((special_)+)?/, '');
+			const currentLabel = _data.datasets[index].label;
+
+			const label = currentLabel.replace(/((regular_)+)?((special_)+)?/, '');
 
 			const newLabel = await this.renameOptionLabel(label);
 			
-			_data.datasets[index].label = newLabel;
+			const postfix = currentLabel.match(/regular/) ? 'Regular' : 'Special';
+
+			_data.datasets[index].label = `${newLabel} (${postfix})`;
 		}
 
 		return _data;
@@ -140,25 +162,29 @@ export default class PriceChart extends React.Component <Props> {
 		
 		let result = null;
 
-		_array.forEach((_el: { label: string}, index) => {
-			if (_el.label === _option) result = index;
-		});
+		for (let i = 0; i < _array.length; i++){
+			const el = _array[i]
+			if (el.label === _option) {
+				result = i;
+				break;
+			}
+		}
 
 		return result;
 	}
 
-	async componentDidMount(){
-		this.data = await this.formatDatesData(this.props.datesData);
-		console.log(this.data)
-		console.log(this.complete)
+	async componentDidMount() {
+
+		this.setState({
+			data: await this.formatDatesData(this.props.datesData)
+		})
 	}
 
-	render (){
-		console.log(this.data.labels)
+	render() {
+
 		return (
 			<>
-				{ this.complete ? <Line data={this.data} /> : '' }
-				{ this.data.labels ? this.data.labels.map(el => (<div>{el}</div>)) : '' }
+				{ this.state.data.labels.length ?  <Line data={this.state.data} /> : '' }
 			</>
 		);
 	}
