@@ -2,8 +2,8 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Line } from 'react-chartjs-2';
 import { observable, action } from 'mobx';
-import { ITimeDependsDataDates } from '../../stores/ProductStore/interfaces';
-import { IOptionStore } from '../../stores/OptionsStore/interfaces';
+import { ITimeDependsDataDates } from '../../../stores/ProductStore/interfaces';
+import { IOptionStore } from '../../../stores/OptionsStore/interfaces';
 
 interface Props {
 	datesData: ITimeDependsDataDates,
@@ -20,7 +20,7 @@ interface State {
 
 @observer
 @inject('optionStore')
-export default class PriceChart extends React.Component <Props, State> {
+export default class QuantityChart extends React.Component <Props, State> {
 
 	constructor(props: any){
 		super(props);
@@ -32,10 +32,6 @@ export default class PriceChart extends React.Component <Props, State> {
 			}
 		};
 	}
-
-	@observable data = '';
-
-	@observable complete = false;
 
 	@observable formatDatesData = async (dates: ITimeDependsDataDates) => {
 

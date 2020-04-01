@@ -10,7 +10,8 @@ import CustomTextInput from '../../components/Forms/CustomTextInput';
 import CustomEditor from '../../components/Forms/CustomEditor';
 import { IInputDataStore } from '../../stores/InputDataStore/interfaces';
 import CustomImageUpload from '../../components/Forms/CustomImageUpload';
-import PriceChart from '../../components/PriceChart';
+import PriceChart from '../../components/Charts/PriceChart';
+import QuantityChart from '../../components/Charts/QuantityChart';
 
 interface Props {
 	match: {
@@ -151,6 +152,7 @@ export default class Product extends React.Component <Props> {
 				<div className="col-md-12">
 					<Card title='Prices'>
 						{ dates && Object.keys(dates).length ? <PriceChart datesData={dates} /> : '' }
+						{ dates && Object.keys(dates).length ? <QuantityChart datesData={dates} /> : '' }
 					</Card>
 				</div>
 			</div>
