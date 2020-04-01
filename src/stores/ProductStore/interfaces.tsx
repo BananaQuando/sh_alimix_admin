@@ -33,16 +33,9 @@ export interface IProductItem {
 
 export interface ITimeDependsDataDates {
 	[key: number]: {
-		regular: {
+		[key: string]: {
 			[key: number]: number
-		},
-		special: {
-			[key: number]: number
-		},
-		quantity: {
-			[key: number]: number
-		},
-		totalOrders: number
+		}
 	}
 }
 
@@ -91,16 +84,9 @@ export interface ITimeDependsDataDatesResponce {
 	product_id: number,
 	dates: {
 		[key: number]: {
-			regular: {
+			[key: string]: {
 				[key: number]: number
-			},
-			special: {
-				[key: number]: number
-			},
-			quantity: {
-				[key: number]: number
-			},
-			totalOrders: number
+			}
 		}
 	}
 }

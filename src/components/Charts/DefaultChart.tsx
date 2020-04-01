@@ -2,12 +2,18 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Line } from 'react-chartjs-2';
 import { observable, action } from 'mobx';
-import { ITimeDependsDataDates } from '../../../stores/ProductStore/interfaces';
-import { IOptionStore } from '../../../stores/OptionsStore/interfaces';
+import { ITimeDependsDataDates } from '../../stores/ProductStore/interfaces';
+import { IOptionStore } from '../../stores/OptionsStore/interfaces';
 
 interface Props {
 	datesData: ITimeDependsDataDates,
-	optionStore?: IOptionStore
+	optionStore?: IOptionStore,
+	chartsData: IChartData[]
+}
+
+interface IChartData {
+	chartField: string,
+	chartColor: string
 }
 
 interface State {
@@ -18,9 +24,9 @@ interface State {
 }
 
 
-@observer
 @inject('optionStore')
-export default class QuantityChart extends React.Component <Props, State> {
+@observer
+export default class DefaultChart extends React.Component <Props, State> {
 
 	constructor(props: any){
 		super(props);
@@ -47,36 +53,32 @@ export default class QuantityChart extends React.Component <Props, State> {
 				const dateData = dates[date];
 
 				if (data.labels.indexOf(date) === -1) data.labels.push(date);
-				for (const key in dateData.regular) {
+				
+				const { chartsData } = this.props;
 
-					if (dateData.regular.hasOwnProperty(key)) {
-						const price = dateData.regular[key];
-						
-						const keyName = `regular_${key}`;
-						const optionIndex = this.findOptionInArray(keyName, data.datasets);
-						
-						if (optionIndex !== null) {
-							data.datasets[optionIndex].data.push(price);
-						}else{
-							const lineRegular = this.createLineData(keyName, 'rgba(0, 123, 255, 1)');
-							lineRegular.data.push(price);
-							data.datasets.push(lineRegular);
-						}
-					}
-				}
+				chartsData.forEach((chart: IChartData) => {
+					
+				});
 
-				for (const key in dateData.special) {
-					if (dateData.special.hasOwnProperty(key)) {
-						const price = dateData.special[key];
+				for (let i = 0; i < chartsData.length; i++){
+					const chartData: IChartData = chartsData[i];
+					const { chartColor, chartField } = chartData;
+
+					for (const key in dateData[chartField]) {
 						
-						const keyName = `special_${key}`;
-						const optionIndex = this.findOptionInArray(keyName, data.datasets);
-						if (optionIndex !== null) {
-							data.datasets[optionIndex].data.push(price);
-						}else{
-							const lineSpecial = this.createLineData(keyName, 'rgba(227, 95, 108, 1)');
-							lineSpecial.data.push(price);
-							data.datasets.push(lineSpecial);
+						if (dateData[chartField].hasOwnProperty(key)) {
+							const price = dateData[chartField][key];
+							
+							const keyName = `${chartField}_${key}`;
+							const optionIndex = this.findOptionInArray(keyName, data.datasets);
+							
+							if (optionIndex !== null) {
+								data.datasets[optionIndex].data.push(price);
+							}else{
+								const line = this.createLineData(keyName, chartColor);
+								line.data.push(price);
+								data.datasets.push(line);
+							}
 						}
 					}
 				}
@@ -100,13 +102,13 @@ export default class QuantityChart extends React.Component <Props, State> {
 
 			const currentLabel = _data.datasets[index].label;
 
-			const label = currentLabel.replace(/((regular_)+)?((special_)+)?/, '');
+			const label = currentLabel.replace(/((regular_)+)?((special_)+)?((quantity_)+)?/, '');
 
 			const newLabel = await this.renameOptionLabel(label);
 			
-			const postfix = currentLabel.match(/regular/) ? 'Regular' : 'Special';
+			const postfix = currentLabel.match(/regular/) ? ' (Regular)' : currentLabel.match(/special/) ? ' (Special)' : '';
 
-			_data.datasets[index].label = `${newLabel} (${postfix})`;
+			_data.datasets[index].label = `${newLabel}${postfix}`;
 		}
 
 		return _data;
@@ -180,7 +182,7 @@ export default class QuantityChart extends React.Component <Props, State> {
 
 		return (
 			<>
-				{ this.state.data.labels.length ?  <Line data={this.state.data} /> : '' }
+				{ <Line data={this.state.data} /> }
 			</>
 		);
 	}

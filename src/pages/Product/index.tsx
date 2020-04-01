@@ -1,6 +1,5 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { Doughnut, Line } from 'react-chartjs-2';
 import { IProductStore, IProductItem } from '../../stores/ProductStore/interfaces';
 import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces';
 import { observable, action } from 'mobx';
@@ -26,7 +25,6 @@ interface Props {
 	inputDataStore: IInputDataStore
 }
 
-
 @inject('contentHeaderStore')
 @inject('productStore')
 @inject('categoryStore')
@@ -38,6 +36,21 @@ export default class Product extends React.Component <Props> {
 	@observable category = {} as ICategoryItem
 	@observable reset = false;
 	@observable resetForm = false;
+
+	tabs = {
+		chartTabs: [
+			{
+				title: 'Prices',
+				link: '#prices',
+				tabsID: `product_tabs_${this.props.match.params.productID}`
+			},
+			{
+				title: 'Quantity',
+				link: '#quantity',
+				tabsID: `product_tabs_${this.props.match.params.productID}`
+			}
+		]
+	}
 
 
 	async componentDidMount(){
@@ -127,6 +140,7 @@ export default class Product extends React.Component <Props> {
 	render (){
 
 		const { id, name, description, thumbnail, dates } = this.product;
+
 		return (
 			<div className="row">
 				<div className="col-md-10">
@@ -150,9 +164,15 @@ export default class Product extends React.Component <Props> {
 					</Card>
 				</div>
 				<div className="col-md-12">
-					<Card title='Prices'>
-						{ dates && Object.keys(dates).length ? <PriceChart datesData={dates} /> : '' }
-						{ dates && Object.keys(dates).length ? <QuantityChart datesData={dates} /> : '' }
+					<Card id={`product_tabs_${this.props.match.params.productID}`} cardTabs={this.tabs.chartTabs} >
+						<div className="tab-content">
+							<div className="tab-pane active" id="prices">
+								{ dates && Object.keys(dates).length ? <PriceChart datesData={dates} /> : '' }
+							</div>
+							<div className="tab-pane" id="quantity">
+								{ dates && Object.keys(dates).length ? <QuantityChart datesData={dates} /> : '' }
+							</div>
+						</div>
 					</Card>
 				</div>
 			</div>
