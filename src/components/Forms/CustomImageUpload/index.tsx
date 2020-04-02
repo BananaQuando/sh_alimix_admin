@@ -56,6 +56,14 @@ export default class CustomImageUpload extends React.Component <Props> {
 
 	componentWillReceiveProps(_nextProps: any){
 		
+		const { inputID, content } = _nextProps;
+
+		if (this.inputDataItem.inputID !== inputID){
+
+			this.inputDataItem = _nextProps.inputDataStore!.getInputDataStore(inputID, content);
+			this.imageValue = this.inputDataItem.inputContent;
+		}
+
 		if (_nextProps.reset){
 			this.resetValues();
 		}

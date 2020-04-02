@@ -11,7 +11,7 @@ export class InputDataStore implements IInputDataStore {
 
 	@observable inputsList = {} as IInputDataList;
 
-	@action getInputDataStore(inputID: number, inputContent: string = '') {
+	@action getInputDataStore(inputID: string, inputContent: string = '') {
 
 		if(this.inputsList[inputID]){
 			
@@ -23,7 +23,7 @@ export class InputDataStore implements IInputDataStore {
 		}
 	}
 
-	@action updateInputData(inputID: number, inputContent: string = '') {
+	@action updateInputData(inputID: string, inputContent: string = '') {
 
 		if(this.inputsList[inputID]){
 			
@@ -37,7 +37,7 @@ export class InputDataStore implements IInputDataStore {
 		}
 	}
 
-	@action createInputDataStore(inputID: number, inputContent: string):IInputDataItem {
+	@action createInputDataStore(inputID: string, inputContent: string):IInputDataItem {
 		
 		return {
 			inputID,

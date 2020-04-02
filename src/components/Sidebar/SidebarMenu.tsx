@@ -1,9 +1,8 @@
 import React from 'react';
 import { inject, observer } from "mobx-react";
-import { ISidebarMenuStore, IMenuList } from '../../stores/SidebarMenuStore/interfaces';
+import { ISidebarMenuStore, IMenuList, IMenuListItem } from '../../stores/SidebarMenuStore/interfaces';
 import { observable, action } from 'mobx';
 import { Link } from 'react-router-dom';
-// import 'Config'
 
 interface Props {
 	sidebarMenuStore?: ISidebarMenuStore,
@@ -23,27 +22,31 @@ export default class SidebarMenu extends React.Component <Props> {
 
 	@action generateMenu(menu: IMenuList){
 
+		const menuList = [];
 
 		for (const key in menu) {
 			if (menu.hasOwnProperty(key)) {
-				const menuElement = menu[key];
 
-				if(menuElement.chidrens){
-					return <li className="nav-item has-treeview menu-open">
-								<Link className='nav-link' to={menuElement.link}>{ menuElement.icon ? <i className={menuElement.icon}></i> : '' }{menuElement.title}</Link>
-								<ul className="nav nav-treeview">
-									{ this.generateMenu(menuElement.chidrens) }
-								</ul>
-							</li>
-				}else{
-					return <li className="nav-item">
-								<Link className='nav-link' to={menuElement.link}>{ menuElement.icon ? <i className={menuElement.icon}></i> : '' }{menuElement.title}</Link>
-							</li>
-				}
+				menuList.push(this.generateMenuItem(menu[key]))
 			}
 		}
+		return menuList;
+	}
 
-		return '';
+	@action generateMenuItem(menuElement: IMenuListItem){
+
+		if(menuElement.chidrens){
+			return <li key={menuElement.id} className="nav-item has-treeview menu-open">
+						<Link className='nav-link' to={menuElement.link}>{ menuElement.icon ? <i className={menuElement.icon}></i> : '' }{menuElement.title}</Link>
+						<ul className="nav nav-treeview">
+							{ this.generateMenu(menuElement.chidrens) }
+						</ul>
+					</li>
+		}else{
+			return <li key={menuElement.id} className="nav-item">
+						<Link className='nav-link' to={menuElement.link}>{ menuElement.icon ? <i className={menuElement.icon}></i> : '' }{menuElement.title}</Link>
+					</li>
+		}
 	}
 
 	render (){

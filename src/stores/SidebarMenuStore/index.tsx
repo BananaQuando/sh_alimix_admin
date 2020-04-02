@@ -20,6 +20,13 @@ const menuData = [
 		"parent": 1,
 		"link": "/categories/1",
 		"icon": "fas fa-tshirt"
+	},
+	{
+		"id": 3,
+		"title": "Не одежда",
+		"parent": 1,
+		"link": "/categories/2",
+		"icon": "fas fa-shield-alt"
 	}
 ]
 
@@ -75,7 +82,6 @@ export class SidebarMenuStore implements ISidebarMenuStore {
 
 			this.menuList = await this.getMenuList();
 			
-		
 			for (const key in this.menuList) {
 				if (this.menuList.hasOwnProperty(key)) {
 					const menuItem = this.menuList[key];

@@ -45,7 +45,15 @@ export default class CustomTextInput extends React.Component <Props> {
 		this.inputValue = this.inputDataItem.inputContent;
 	}
 
-	componentWillReceiveProps(_nextProps: any){
+	componentWillReceiveProps(_nextProps: Props){
+
+		const { inputID, content } = _nextProps;
+
+		if (this.inputDataItem.inputID !== inputID){
+
+			this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content);
+			this.inputValue = this.inputDataItem.inputContent;
+		}
 
 		if (_nextProps.reset) {
 			this.resetValues();

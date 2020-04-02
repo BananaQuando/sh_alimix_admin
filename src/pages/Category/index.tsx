@@ -42,6 +42,16 @@ export default class Categories extends React.Component <Props> {
 		}
 	];
 
+	async componentWillReceiveProps(nextProps: Props){
+
+		const { categoryID } = nextProps.match.params;
+		
+
+		this.category = await nextProps.categoryStore.getCategory(categoryID);
+
+		this.setSeoData();
+	}
+
 	async componentDidMount(){
 
 		const { categoryID } = this.props.match.params;
@@ -78,7 +88,7 @@ export default class Categories extends React.Component <Props> {
 		const { id, title, description, thumb } = this.category;
 
 		return (
-			<Card id={`category_tabs_${this.props.match.params.categoryID}`}  cardTabs={this.tabs}>
+			<Card id={`category_tabs_${this.props.match.params.categoryID}`} cardTabs={this.tabs}>
 				<div className="tab-content">
 					<div className="tab-pane active" id="edit">
 						{ title ? <CustomTextInput title='Title' content={ title } inputID={`category_${id}_title`} /> : '' }

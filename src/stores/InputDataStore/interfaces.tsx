@@ -5,10 +5,10 @@ export interface IInputDataStore {
 }
 
 export interface IInputDataItem {
-	inputID: number,
+	inputID: string,
 	inputContent: string
 }
 
 export interface IInputDataList{
-	[key: number]: IInputDataItem
+	[key: string]: IInputDataItem
 }
