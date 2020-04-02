@@ -28,6 +28,8 @@ export default class CustomImageUpload extends React.Component <Props> {
 
 		const { inputID, content } = this.props;
 
+		console.log(this.props)
+
 		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content ? content : placeholder);
 		
 		this.imageValue = this.inputDataItem.inputContent;
@@ -37,8 +39,6 @@ export default class CustomImageUpload extends React.Component <Props> {
 
 		if (_event.target.files && _event.target.files[0]){
 			const imageURL = URL.createObjectURL(_event.target.files[0]);
-			console.log(imageURL)
-			console.log(_event.target.files[0])
 
 			this.imageValue = imageURL;
 			this.inputDataItem.inputContent = imageURL;

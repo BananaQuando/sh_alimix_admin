@@ -11,6 +11,7 @@ import { IInputDataStore } from '../../stores/InputDataStore/interfaces';
 import CustomImageUpload from '../../components/Forms/CustomImageUpload';
 import PriceChart from '../../components/Charts/PriceChart';
 import QuantityChart from '../../components/Charts/QuantityChart';
+import CustomMultipleImageUpload from '../../components/Forms/CustomMultipleImageUpload';
 
 interface Props {
 	match: {
@@ -47,6 +48,18 @@ export default class Product extends React.Component <Props> {
 				title: 'Quantity',
 				link: '#quantity',
 				tabsID: `product_tabs_${this.props.match.params.productID}`
+			}
+		],
+		editTabs: [
+			{
+				title: 'Edit',
+				link: '#edit',
+				tabsID: `product_tabs_edit_${this.props.match.params.productID}`
+			},
+			{
+				title: 'Images',
+				link: '#images',
+				tabsID: `product_tabs_edit_${this.props.match.params.productID}`
 			}
 		]
 	}
@@ -85,6 +98,18 @@ export default class Product extends React.Component <Props> {
 						title: 'Quantity',
 						link: '#quantity',
 						tabsID: `product_tabs_${this.props.match.params.productID}`
+					}
+				],
+				editTabs: [
+					{
+						title: 'Edit',
+						link: '#edit',
+						tabsID: `product_tabs_edit_${this.props.match.params.productID}`
+					},
+					{
+						title: 'Images',
+						link: '#images',
+						tabsID: `product_tabs_edit_${this.props.match.params.productID}`
 					}
 				]
 			}
@@ -158,15 +183,30 @@ export default class Product extends React.Component <Props> {
 
 	render (){
 
-		const { id, name, description, thumbnail, dates } = this.product;
+		const { id, name, description, thumbnail, dates, images } = this.product;
 
 		return (
 			<div className="row">
 				<div className="col-md-10">
-					<Card title='Edit'>
-						{ name ? <CustomTextInput onChange={this.setReset} reset={this.resetForm} title='Name' inputID={`product_${id}_name`} content={name} /> : '' }
-						{ description ? <CustomEditor onChange={this.setReset} reset={this.resetForm} title='Description' inputID={`product_${id}_description`} content={description} /> : '' }
-						{ description ? <CustomImageUpload onChange={this.setReset} reset={this.resetForm} title='Thumbnail' inputID={`product_${id}_thumbnail`} content={thumbnail} /> : '' }
+					<Card id={`product_tabs_edit_${this.props.match.params.productID}`} cardTabs={this.tabs.editTabs}>
+						<div className="tab-content">
+							<div className="tab-pane active" id="edit">
+								{ name ?
+									<CustomTextInput onChange={this.setReset} reset={this.resetForm} title='Name' inputID={`product_${id}_name`} content={name} />
+								: '' }
+								{ description ?
+									<CustomEditor onChange={this.setReset} reset={this.resetForm} title='Description' inputID={`product_${id}_description`} content={description} />
+								: '' }
+							</div>
+							<div className="tab-pane" id="images">
+								{ thumbnail ?
+									<CustomImageUpload onChange={this.setReset} reset={this.resetForm} title='Thumbnail' inputID={`product_${id}_thumbnail`} content={thumbnail} /> 
+								: '' }
+								{ images ? 
+									<CustomMultipleImageUpload onChange={this.setReset} reset={this.resetForm} title='Additional images' inputID={`product_${id}_images`} content={images} />
+								: '' }
+							</div>
+						</div>
 					</Card>
 				</div>
 				<div className="col-md-2">
