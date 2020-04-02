@@ -21,9 +21,6 @@ export default class Card extends React.Component<Props> {
 	render() {
 
 		const { title, children, cardBodyClass, cardHeaderClass, cardClass, cardTabs, cardTools, id } = this.props;
-
-		console.log(cardTabs)
-
 		return (
 			<div id={ id ? id : ''} className={`card ${ cardClass ? cardClass : ''}`}>
 				{ title || cardTabs || cardTools ? <div className={`card-header ${ cardHeaderClass ? cardHeaderClass : ''}`}>

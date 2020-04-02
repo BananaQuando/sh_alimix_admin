@@ -20,7 +20,6 @@ interface Props {
 	},
 	categoryStore: ICategoryStore,
 	productStore: IProductStore,
-	category: ICategoryItem,
 	contentHeaderStore: IContentHeaderStore,
 	inputDataStore: IInputDataStore
 }

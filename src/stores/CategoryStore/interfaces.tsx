@@ -1,6 +1,8 @@
 export interface ICategoryStore {
 	getCategories: Function,
 	getCategory: Function,
+	saveCategory: Function,
+	deleteCategory: Function
 }
 
 export interface ICategoryItem {

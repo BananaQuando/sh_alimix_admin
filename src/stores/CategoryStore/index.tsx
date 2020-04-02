@@ -60,4 +60,14 @@ export class CategoryStore implements ICategoryStore {
 			return this.categoryList[data.id];
 		}
 	}
+
+	@action async saveCategory(_category: ICategoryItem){
+
+		console.log('saving category');
+	}
+
+	@action async deleteCategory(_categoryID: number){
+
+		console.log('deleting category');
+	}
 }
