@@ -3,7 +3,7 @@ import {
 	action,
 	// computed
 } from "mobx";
-import { IProductItem, IProductList, IProductResponce, ICategoryProductsList, IProductStore, ITimeDependsDataDates, ITimeDependsDataDatesResponce, ITimeDependsDataResponce } from './interfaces'
+import { IProductItem, IProductList, IProductResponce, ICategoryProductsList, IProductStore, ITimeDependsDataDates, ITimeDependsDataDatesResponce } from './interfaces'
 import { Config } from "../../Config";
 
 

@@ -1,6 +1,6 @@
 import {
 	observable,
-	action,
+	// action,
 	// computed
 } from "mobx";
 import { IOptionStore, IOptionValue, IOptionValueList, IOptionValueResponce } from './interfaces'
