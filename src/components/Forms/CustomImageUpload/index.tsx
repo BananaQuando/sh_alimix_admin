@@ -54,7 +54,7 @@ export default class CustomImageUpload extends React.Component <Props> {
 		this.imageValue = this.inputDataItem.inputContent;
 	}
 
-	componentWillReceiveProps(_nextProps: any){
+	componentWillUpdate(_nextProps: Props){
 		
 		const { inputID, content } = _nextProps;
 

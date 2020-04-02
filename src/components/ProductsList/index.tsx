@@ -36,6 +36,7 @@ export default class ProductsList extends React.Component <Props> {
 	async componentWillReceiveProps(_nextProps: Props){
 
 		const { categoryID } = _nextProps;
+		
 
 		this.productsList = await _nextProps.productStore!.getProductsByCategory(categoryID);
 	}

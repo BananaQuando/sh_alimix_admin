@@ -50,7 +50,7 @@ export default class CustomEditor extends React.Component <Props> {
 		this.editorState = this.convertToState(this.inputDataItem.inputContent);
 	}
 
-	componentWillReceiveProps(_nextProps: any){
+	componentWillReceiveProps(_nextProps: Props){
 		
 		const { inputID, content } = _nextProps;
 
