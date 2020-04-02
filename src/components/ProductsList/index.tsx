@@ -33,6 +33,13 @@ export default class ProductsList extends React.Component <Props> {
 		this.productsList = await this.props.productStore!.getProductsByCategory(categoryID);
 	}
 
+	async componentWillReceiveProps(_nextProps: Props){
+
+		const { categoryID } = _nextProps;
+
+		this.productsList = await _nextProps.productStore!.getProductsByCategory(categoryID);
+	}
+
 	@observable formatTableData() {
 
 		

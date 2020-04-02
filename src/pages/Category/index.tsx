@@ -29,7 +29,7 @@ export default class Categories extends React.Component <Props> {
 
 	@observable category = {} as ICategoryItem
 
-	tabs = [
+	@observable tabs = [
 		{
 			title: 'Edit category',
 			link: '#edit',
@@ -46,8 +46,22 @@ export default class Categories extends React.Component <Props> {
 
 		const { categoryID } = nextProps.match.params;
 		
-
-		this.category = await nextProps.categoryStore.getCategory(categoryID);
+		if (this.category.id !== categoryID){
+			this.category = await nextProps.categoryStore.getCategory(categoryID);
+			
+			this.tabs = [
+				{
+					title: 'Edit category',
+					link: '#edit',
+					tabsID: `category_tabs_${nextProps.match.params.categoryID}`
+				},
+				{
+					title: 'Products',
+					link: '#products',
+					tabsID: `category_tabs_${nextProps.match.params.categoryID}`
+				}
+			];
+		}
 
 		this.setSeoData();
 	}

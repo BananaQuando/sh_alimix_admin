@@ -37,7 +37,7 @@ export default class Product extends React.Component <Props> {
 	@observable reset = false;
 	@observable resetForm = false;
 
-	tabs = {
+	@observable tabs = {
 		chartTabs: [
 			{
 				title: 'Prices',
@@ -69,6 +69,26 @@ export default class Product extends React.Component <Props> {
 
 		if (this.product.name !== await this.getInputValue('name') || this.product.description !== await this.getInputValue('description')){
 			this.reset = true;
+		}
+	}
+
+	componentWillReceiveProps(_nextProps: Props){
+
+		if (this.product.id !== _nextProps.match.params.productID){
+			this.tabs = {
+				chartTabs: [
+					{
+						title: 'Prices',
+						link: '#prices',
+						tabsID: `product_tabs_${this.props.match.params.productID}`
+					},
+					{
+						title: 'Quantity',
+						link: '#quantity',
+						tabsID: `product_tabs_${this.props.match.params.productID}`
+					}
+				]
+			}
 		}
 	}
 
