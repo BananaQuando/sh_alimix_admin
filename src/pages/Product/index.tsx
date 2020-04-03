@@ -169,6 +169,7 @@ export default class Product extends React.Component <Props> {
 		this.product.name = await this.getInputValue('name');
 		this.product.description = await this.getInputValue('description');
 		this.product.thumbnail = await this.getInputValue('thumbnail');
+		this.product.images = await this.getInputValue('images');
 
 		this.props.productStore.saveProduct(this.product);
 		this.reset = false;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { observable, action, remove } from 'mobx';
 import { IInputDataStore, IInputDataItem } from '../../../stores/InputDataStore/interfaces';
 import placeholder from './placeholder.png';
 import CustomImageUpload from '../CustomImageUpload';
@@ -8,7 +8,7 @@ import CustomImageUpload from '../CustomImageUpload';
 
 interface Props {
 	inputID: string,
-	content?: string[],
+	content?: { [key: number]: string},
 	title?: string,
 	inputDataStore?: IInputDataStore,
 	inputDataItem?: IInputDataItem,
@@ -20,59 +20,116 @@ interface Props {
 @observer
 export default class CustomMultipleImageUpload extends React.Component <Props> {
 
-	@observable images = [];
+	@observable images = {} as {[key: number]: string};
 	@observable inputDataItem = {} as IInputDataItem;
 	@observable onChange = this.props.onChange? this.props.onChange : () => {};
-	@observable reset = this.props.reset;
+
+	stringifyImages(images: string | { [key: number]: string } | undefined) {
+		if (typeof images === 'object' && Object.keys(images).length > 0){
+			return JSON.stringify(images);
+		}else if (typeof images === 'object' || typeof images === 'undefined'){
+			return JSON.stringify({0: placeholder});
+		}else{
+			return images;
+		}
+	}
 
 	@action componentDidMount(){
 
 		const { inputID, content } = this.props;
 
-		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content!.length ? JSON.stringify(content) : JSON.stringify([placeholder]));
+		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, this.stringifyImages(content));
 		
 		this.images = JSON.parse(this.inputDataItem.inputContent);
 	}
 
 	onChangeHandler = () => {
 
+		const { inputID } = this.props;
+
+		const images = {} as { [key: number]: string};
+
+		for (const key in this.images) {
+			if (this.images.hasOwnProperty(key)) {
+				const imageData = this.props.inputDataStore!.getInputDataStore(`${inputID}[${key}]`);
+
+				images[key] = imageData.inputContent;
+			}
+		}
+
+		if (Object.keys(images).length === 0) images[0] = placeholder;
+
+		this.inputDataItem.inputContent = this.stringifyImages(images);
+
 		this.onChange();
 	}
 
-	@action resetValues = () => {
-
-		const { inputID, content } = this.props;
-
-		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content!.length ? JSON.stringify(content) : JSON.stringify([placeholder]));
-		this.images = JSON.parse(this.inputDataItem.inputContent);
-	}
-
-	componentWillUpdate(_nextProps: Props){
+	componentWillReceiveProps(_nextProps: Props){
 		
 		const { inputID, content } = _nextProps;
 
 		if (this.inputDataItem.inputID !== inputID){
 
-			this.inputDataItem = _nextProps.inputDataStore!.getInputDataStore(inputID, content!.length ? JSON.stringify(content) : JSON.stringify([placeholder]));
+			this.inputDataItem = _nextProps.inputDataStore!.getInputDataStore(inputID, this.stringifyImages(content));
 			this.images = JSON.parse(this.inputDataItem.inputContent);
 		}
 
 		if (_nextProps.reset){
-			this.resetValues();
+			
+			const { inputID, content } = this.props;
+
+			this.inputDataItem = this.props.inputDataStore!.updateInputData(inputID, this.stringifyImages(content));
+
+			this.images = JSON.parse(this.inputDataItem.inputContent);
 		}
 	}
 
+	@action addNewImage = () => {
 
-	render (){
+		const id = new Date().getTime();
+		this.images[id] = placeholder;
+		this.inputDataItem.inputContent = this.stringifyImages(this.images);
+		this.onChange();
+	}
 
-		const { inputID, title } = this.props;
+	@action removeImage = (index: number) => {
+
+		remove(this.images, String(index))
+		console.log(this.images)
+		this.inputDataItem.inputContent = this.stringifyImages(this.images);
+		this.onChange();
+	}
+
+	generateImagesList(images: { [key: number]: string }){
+
+		const { inputID } = this.props;
+
+		const imagesList = [];
+
+		for (const key in images) {
+			if (images.hasOwnProperty(key)) {
+				const image = images[key];
+				imagesList.push(
+					<div className='multiple-image__item' key={key}>
+						<CustomImageUpload reset={this.props.reset} content={image} onChange={this.onChangeHandler} inputID={`${inputID}[${key}]`} />
+						<button onClick={() => { this.removeImage(Number(key))}} className="btn btn-danger"><i className="fas fa-trash-alt"></i></button>
+					</div>
+				);
+			}
+		}
+
+		return imagesList;
+	}
+
+
+	render () {
+		const { title } = this.props;
 
 		return (
 			<div className="form-group">
 				{ title ? <label>{ title }</label> : ''}
-				{ this.images.map((image: string, index) => (
-					<CustomImageUpload key={index} reset={this.reset} content={image} onChange={this.onChangeHandler} inputID={`${inputID}${index}`} />
-				))}
+				{ this.generateImagesList(this.images) }
+				<button className="btn btn-primary" onClick={this.addNewImage}>Add new image</button>
 			</div>
 		);
 	}

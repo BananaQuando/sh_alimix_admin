@@ -141,8 +141,6 @@ export default class Categories extends React.Component <Props> {
 
 		const { id, title, description, thumb } = this.category;
 
-		console.log(title)
-
 		return (
 			<div className="row">
 				<div className="col-md-10">

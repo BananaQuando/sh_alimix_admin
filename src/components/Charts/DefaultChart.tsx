@@ -56,10 +56,6 @@ export default class DefaultChart extends React.Component <Props, State> {
 				
 				const { chartsData } = this.props;
 
-				chartsData.forEach((chart: IChartData) => {
-					
-				});
-
 				for (let i = 0; i < chartsData.length; i++){
 					const chartData: IChartData = chartsData[i];
 					const { chartColor, chartField } = chartData;

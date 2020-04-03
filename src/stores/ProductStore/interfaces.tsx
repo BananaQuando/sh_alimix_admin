@@ -18,7 +18,9 @@ export interface IProductItem {
 	ordersCount: number,
 	reviews: number,
 	thumbnail: string,
-	images: string[],
+	images: {
+		[key: number]: string
+	},
 	options: {
 		[key: string]: number[]
 	},
@@ -60,7 +62,9 @@ export interface IProductResponce {
 	default_url: string,
 	reviews: number,
 	thumbnail: string,
-	images: string[],
+	images: {
+		[key: number]: string
+	},
 	options: {
 		[key: string]: number[]
 	},

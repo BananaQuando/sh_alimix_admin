@@ -28,8 +28,6 @@ export default class CustomImageUpload extends React.Component <Props> {
 
 		const { inputID, content } = this.props;
 
-		console.log(this.props)
-
 		this.inputDataItem = this.props.inputDataStore!.getInputDataStore(inputID, content ? content : placeholder);
 		
 		this.imageValue = this.inputDataItem.inputContent;
@@ -52,6 +50,13 @@ export default class CustomImageUpload extends React.Component <Props> {
 
 		this.inputDataItem = this.props.inputDataStore!.updateInputData(inputID, content);
 		this.imageValue = this.inputDataItem.inputContent;
+	}
+
+	@action clearInput = (_event: any) => {
+
+		this.imageValue = placeholder;
+		this.inputDataItem.inputContent = placeholder;
+		this.onChange(_event);
 	}
 
 	componentWillUpdate(_nextProps: Props){
@@ -82,6 +87,8 @@ export default class CustomImageUpload extends React.Component <Props> {
 						<img src={this.imageValue} alt={ title ? title : ''} />
 					</label>
 					<label htmlFor={inputID} className='form-upload__label btn btn-primary btn-md'>Upload Image</label>
+					{ this.imageValue !== placeholder ? <button className="btn btn-warning form-upload__label" onClick={this.clearInput}><i className="fas fa-broom"></i></button> : ''}
+					
 				</div>
 				<input id={inputID} type="file" className='hidden' accept='.png,.jpg,.jpeg' onChange={this.onFileChangeHandler} />
 			</div>
