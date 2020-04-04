@@ -5,13 +5,10 @@ import { IContentHeaderStore } from '../../stores/ContentHeaderStore/interfaces'
 import { observable, action } from 'mobx';
 import { ICategoryStore, ICategoryItem } from '../../stores/CategoryStore/interfaces';
 import Card from '../../components/Card';
-import CustomTextInput from '../../components/Forms/CustomTextInput';
-import CustomEditor from '../../components/Forms/CustomEditor';
 import { IInputDataStore } from '../../stores/InputDataStore/interfaces';
-import CustomImageUpload from '../../components/Forms/CustomImageUpload';
 import PriceChart from '../../components/Charts/PriceChart';
 import QuantityChart from '../../components/Charts/QuantityChart';
-import CustomMultipleImageUpload from '../../components/Forms/CustomMultipleImageUpload';
+import Form, { IInput } from '../../components/Forms';
 
 interface Props {
 	match: {
@@ -36,6 +33,9 @@ export default class Product extends React.Component <Props> {
 	@observable category = {} as ICategoryItem
 	@observable reset = false;
 	@observable resetForm = false;
+	@observable loading = true;
+
+	@observable inputs = [] as IInput[];
 
 	@observable tabs = {
 		chartTabs: [
@@ -49,19 +49,57 @@ export default class Product extends React.Component <Props> {
 				link: '#quantity',
 				tabsID: `product_tabs_${this.props.match.params.productID}`
 			}
-		],
-		editTabs: [
-			{
-				title: 'Edit',
-				link: '#edit',
-				tabsID: `product_tabs_edit_${this.props.match.params.productID}`
-			},
-			{
-				title: 'Images',
-				link: '#images',
-				tabsID: `product_tabs_edit_${this.props.match.params.productID}`
-			}
 		]
+	}
+
+	@action procesPageData = (product: IProductItem) => {
+
+		return {
+			tabs: {
+				chartTabs: [
+					{
+						title: 'Prices',
+						link: '#prices',
+						tabsID: `product_tabs_${product.id}`
+					},
+					{
+						title: 'Quantity',
+						link: '#quantity',
+						tabsID: `product_tabs_${product.id}`
+					}
+				]
+			},
+			inputs: [
+				{
+					inputType: 'text',
+					inputID: `product_${product.id}_name`,
+					inputName: 'name',
+					inputValue: product.name,
+					title: 'Name'
+				},
+				{
+					inputType: 'editor',
+					inputID: `product_${product.id}_description`,
+					inputValue: product.description,
+					inputName: 'description',
+					title: 'Description'
+				},
+				{
+					inputType: 'image',
+					inputID: `product_${product.id}_thumb`,
+					inputValue: product.thumbnail,
+					inputName: 'thumbnail',
+					title: 'Thumbnail'
+				},
+				{
+					inputType: 'multiple-image',
+					inputID: `product_${product.id}_images`,
+					inputValue: product.images,
+					inputName: 'images',
+					title: 'Images'
+				},
+			]
+		}
 	}
 
 
@@ -71,49 +109,40 @@ export default class Product extends React.Component <Props> {
 
 		this.product = await this.props.productStore.getProduct(productID);
 
-		if (!Object.keys(this.product.dates).length){
-			this.product.dates = await this.props.productStore.getProductPriceData(this.product.id);
-		}
+		const productData = this.procesPageData(this.product);
+
+		this.tabs = productData.tabs;
+		this.inputs = productData.inputs;
+
+		this.loading = false;
 
 		this.category = await this.props.categoryStore.getCategory(this.product.mainCategory);
 
 		this.setSeoData();
 
-		if (this.product.name !== await this.getInputValue('name') || this.product.description !== await this.getInputValue('description')){
-			this.reset = true;
+		if (!Object.keys(this.product.dates).length){
+			this.product.dates = await this.props.productStore.getProductPriceData(this.product.id);
 		}
 	}
 
-	componentWillReceiveProps(_nextProps: Props){
+	async componentWillReceiveProps(_nextProps: Props){
 
-		if (this.product.id !== _nextProps.match.params.productID){
-			this.tabs = {
-				chartTabs: [
-					{
-						title: 'Prices',
-						link: '#prices',
-						tabsID: `product_tabs_${this.props.match.params.productID}`
-					},
-					{
-						title: 'Quantity',
-						link: '#quantity',
-						tabsID: `product_tabs_${this.props.match.params.productID}`
-					}
-				],
-				editTabs: [
-					{
-						title: 'Edit',
-						link: '#edit',
-						tabsID: `product_tabs_edit_${this.props.match.params.productID}`
-					},
-					{
-						title: 'Images',
-						link: '#images',
-						tabsID: `product_tabs_edit_${this.props.match.params.productID}`
-					}
-				]
-			}
+		const { productID: nextProductID } = _nextProps.match.params;
+
+		if (this.product.id !== nextProductID){
+
+			this.loading = true;
+
+			this.product = await _nextProps.productStore.getProduct(nextProductID);
+			
+			const productData = this.procesPageData(this.product);
+
+			this.tabs = productData.tabs;
+			this.inputs = productData.inputs;
+			this.loading = false;
 		}
+
+		this.setSeoData();
 	}
 
 
@@ -155,22 +184,13 @@ export default class Product extends React.Component <Props> {
 		setTimeout(() => {this.resetForm = false;}, 0);
 	}
 
-	getInputValue = async (inputName: string) => {
-
-		const { id } = this.product;
-
-		const data = await this.props.inputDataStore.getInputDataStore(`product_${id}_${inputName}`);
-
-		return data.inputContent;
-	}
-
 	@action saveForm = async () => {
 
-		this.product.name = await this.getInputValue('name');
-		this.product.description = await this.getInputValue('description');
-		this.product.thumbnail = await this.getInputValue('thumbnail');
-		this.product.images = await this.getInputValue('images');
-
+		for (let i = 0; i < this.inputs.length; i++){
+			const input = this.inputs[i];
+			// @ts-ignore
+			if (this.product.hasOwnProperty(input.inputName)) this.product[input.inputName] = (await this.props.inputDataStore.getInputDataStore(input.inputID)).inputContent;
+		}
 		this.props.productStore.saveProduct(this.product);
 		this.reset = false;
 	}
@@ -184,29 +204,14 @@ export default class Product extends React.Component <Props> {
 
 	render (){
 
-		const { id, name, description, thumbnail, dates, images } = this.product;
+		const { dates } = this.product;
 
 		return (
 			<div className="row">
 				<div className="col-md-10">
-					<Card id={`product_tabs_edit_${this.props.match.params.productID}`} cardTabs={this.tabs.editTabs}>
+					<Card title='Edit'>
 						<div className="tab-content">
-							<div className="tab-pane active" id="edit">
-								{ name ?
-									<CustomTextInput onChange={this.setReset} reset={this.resetForm} title='Name' inputID={`product_${id}_name`} content={name} />
-								: '' }
-								{ description ?
-									<CustomEditor onChange={this.setReset} reset={this.resetForm} title='Description' inputID={`product_${id}_description`} content={description} />
-								: '' }
-							</div>
-							<div className="tab-pane" id="images">
-								{ thumbnail ?
-									<CustomImageUpload onChange={this.setReset} reset={this.resetForm} title='Thumbnail' inputID={`product_${id}_thumbnail`} content={thumbnail} /> 
-								: '' }
-								{ images ? 
-									<CustomMultipleImageUpload onChange={this.setReset} reset={this.resetForm} title='Additional images' inputID={`product_${id}_images`} content={images} />
-								: '' }
-							</div>
+							<Form loading={this.loading} onInputsChange={this.setReset} resetForm={this.resetForm} inputs={this.inputs} />
 						</div>
 					</Card>
 				</div>
