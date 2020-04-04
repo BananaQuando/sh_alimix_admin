@@ -6,6 +6,7 @@ import Card from '../Card';
 import Table from '../Table';
 import { Link } from 'react-router-dom';
 
+
 interface Props {
 	categoryID?: number
 	productStore?: IProductStore
@@ -18,19 +19,21 @@ interface tableFormat{
 
 @inject('productStore')
 @observer
-export default class ProductsList extends React.Component <Props> {
+class ProductsList extends React.Component <Props> {
 
 	@observable productsList = [] as IProductItem[];
 	tableData: tableFormat = {
 		tableHead: [],
 		tableBody: []
 	};
+	@observable loading = true;
 
 	async componentDidMount(){
 
 		const { categoryID } = this.props;
 
 		this.productsList = await this.props.productStore!.getProductsByCategory(categoryID);
+		this.loading = false;
 	}
 
 	async componentWillReceiveProps(_nextProps: Props){
@@ -86,11 +89,12 @@ export default class ProductsList extends React.Component <Props> {
 		return (
 			<div>
 				<Card title='Products' cardBodyClass='p-0'>
-					<Table tableData={this.formatTableData()}></Table>
+					<Table loading={this.loading} tableData={this.formatTableData()}></Table>
 				</Card>
 			</div>
 
 		);
 	}
-
 }
+
+export default ProductsList;

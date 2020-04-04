@@ -147,9 +147,9 @@ export default class Categories extends React.Component <Props> {
 					<Card id={`category_tabs_${this.props.match.params.categoryID}`} cardTabs={this.tabs}>
 						<div className="tab-content">
 							<div className="tab-pane active" id="edit">
-								{ title ? <CustomTextInput onChange={this.setReset} reset={this.resetForm} title='Title' content={ title } inputID={`category_${id}_title`} /> : '' }
-								{ description ? <CustomEditor onChange={this.setReset} reset={this.resetForm} title='Description' content={ description } inputID={`category_${id}_description`} /> : '' }
-								{ thumb ? <CustomImageUpload onChange={this.setReset} reset={this.resetForm} title='Thumbnail' content={ thumb } inputID={`category_${id}_thumb`} /> : '' }
+								{ title && <CustomTextInput onChange={this.setReset} reset={this.resetForm} title='Title' content={ title } inputID={`category_${id}_title`} /> }
+								{ description && <CustomEditor onChange={this.setReset} reset={this.resetForm} title='Description' content={ description } inputID={`category_${id}_description`} /> }
+								{ thumb && <CustomImageUpload onChange={this.setReset} reset={this.resetForm} title='Thumbnail' content={ thumb } inputID={`category_${id}_thumb`} /> }
 							</div>
 							<div className="tab-pane" id="products">
 								<ProductsList categoryID={id} />

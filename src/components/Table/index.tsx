@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from "mobx-react";
+import withLoader from '../../HOC/WithLoader';
 
 
 interface TableProps{
@@ -7,11 +8,12 @@ interface TableProps{
 		tableHead?: string[],
 		tableBody?: string[][],
 		tableFooter?: string[]
-	}
+	},
+	loading?: boolean
 }
 
 @observer
-export default class Table extends React.Component<TableProps>{
+class Table extends React.Component<TableProps>{
 
 	render(){
 		
@@ -60,3 +62,5 @@ export default class Table extends React.Component<TableProps>{
 		);
 	}
 }
+
+export default withLoader(Table)
