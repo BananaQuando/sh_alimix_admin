@@ -16,7 +16,7 @@ class Chart extends React.Component <ChartProps> {
 
 		return (
 			<>
-				{ <Line data={ this.props.data } /> }
+				{ <Line options={{ maintainAspectRatio: false }} data={ this.props.data } /> }
 			</>
 		);
 	}

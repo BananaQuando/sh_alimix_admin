@@ -4,7 +4,7 @@ import { observable, action } from 'mobx';
 import { ITimeDependsDataDates } from '../../stores/ProductStore/interfaces';
 import { IOptionStore } from '../../stores/OptionsStore/interfaces';
 import Chart from './Chart';
-
+import './styles.sass';
 
 interface Props {
 	datesData: ITimeDependsDataDates,
@@ -181,7 +181,9 @@ class DefaultChart extends React.Component <Props, State> {
 
 		return (
 			<>
-				{ <Chart loading={this.loading} data={this.state.data} /> }
+				<div className="chart-wrapper">
+					{ <Chart loading={this.loading} data={this.state.data} /> }
+				</div>
 			</>
 		);
 	}
