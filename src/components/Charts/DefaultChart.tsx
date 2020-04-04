@@ -1,9 +1,10 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { Line } from 'react-chartjs-2';
 import { observable, action } from 'mobx';
 import { ITimeDependsDataDates } from '../../stores/ProductStore/interfaces';
 import { IOptionStore } from '../../stores/OptionsStore/interfaces';
+import Chart from './Chart';
+
 
 interface Props {
 	datesData: ITimeDependsDataDates,
@@ -18,15 +19,16 @@ interface IChartData {
 
 interface State {
 	data: {
-		labels: string[],
 		datasets: any[]
+		labels: string[],
 	}
 }
 
-
 @inject('optionStore')
 @observer
-export default class DefaultChart extends React.Component <Props, State> {
+class DefaultChart extends React.Component <Props, State> {
+
+	@observable loading = true;
 
 	constructor(props: any){
 		super(props);
@@ -82,7 +84,7 @@ export default class DefaultChart extends React.Component <Props, State> {
 		}
 
 		data = await this.formatLabels(data);
-
+		
 		return data;
 	}
 
@@ -171,16 +173,19 @@ export default class DefaultChart extends React.Component <Props, State> {
 
 		this.setState({
 			data: await this.formatDatesData(this.props.datesData)
-		})
+		});
+		this.loading = false;
 	}
 
 	render() {
 
 		return (
 			<>
-				{ <Line data={this.state.data} /> }
+				{ <Chart loading={this.loading} data={this.state.data} /> }
 			</>
 		);
 	}
 
 }
+
+export default DefaultChart;

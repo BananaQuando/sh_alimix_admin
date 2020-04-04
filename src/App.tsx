@@ -12,6 +12,8 @@ import Footer from './components/Footer';
 import './Config';
 import { observer } from 'mobx-react';
 
+
+
 @observer
 export default class App extends React.Component{
 
